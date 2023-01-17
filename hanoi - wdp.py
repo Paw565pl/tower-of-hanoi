@@ -9,17 +9,17 @@ def game(disk_amount, who_plays):
                 print('-' * structure['tower-1'][i], ' ' * (len(structure['tower-1']) - structure['tower-1'][i]),
                       end='')
             else:
-                print('|', ' ' * len(structure), end='')
+                print('|', ' ' * (len(structure['tower-1']) - 1), end='')
             if structure['tower-2'][i] >= 1:
                 print('-' * structure['tower-2'][i], ' ' * (len(structure['tower-2']) - structure['tower-2'][i]),
                       end='')
             else:
-                print('|', ' ' * len(structure), end='')
+                print('|', ' ' * (len(structure['tower-2']) - 1), end='')
             if structure['tower-3'][i] >= 1:
                 print('-' * structure['tower-3'][i], ' ' * (len(structure['tower-3']) - structure['tower-3'][i]),
                       end='')
             else:
-                print('|', ' ' * len(structure), end='')
+                print('|', ' ' * (len(structure['tower-3']) - 1), end='')
             print('')
             # print(structure['tower-1'][i], structure['tower-2'][i], structure['tower-3'][i])
 
