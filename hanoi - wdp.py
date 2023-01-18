@@ -49,9 +49,14 @@ def game(disk_amount, who_plays):
 
         if from_choice and on_choice in ['1', '2', '3']:
 
-            # structure[f'tower-{from_choice}'][0], structure[f'tower-{on_choice}'][-1] = structure[f'tower-{on_choice}'][-1], structure[f'tower-{from_choice}'][0],
+            # structure[f'tower-{from_choice}'][0], structure[f'tower-{on_choice}'][-1] = \
+            # structure[f'tower-{on_choice}'][-1], structure[f'tower-{from_choice}'][0]
             i_to_take = None
             i_to_replace = None
+
+            if structure[f'tower-{from_choice}'] == [0] * disk_amount:
+                print('nie można przenieść z pustej wieży')
+                return False
 
             for element in structure[f'tower-{from_choice}']:
                 if element != 0:
