@@ -30,11 +30,11 @@ def game(disk_amount, who_plays):
         if who_plays == 'player':
             # wybor dyskow do zmiany
 
-            from_choice = input('Z której wieży chcesz przełożyć? Podaj liczbę [0 aby zrezygnować]\n> ')
+            from_choice = input('Z której wieży chcesz przełożyć? Podaj numer wieży [0 aby zrezygnować]\n> ')
             if from_choice == '0':
                 print('Niezła próba')
                 exit()
-            on_choice = input('Na którą wieżę chcesz przełożyć? Podaj liczbę [0 aby zrezygnować]\n> ')
+            on_choice = input('Na którą wieżę chcesz przełożyć? Podaj numer wieży [0 aby zrezygnować]\n> ')
             if on_choice == '0':
                 print('Niezła próba')
                 exit()
@@ -130,6 +130,7 @@ def game(disk_amount, who_plays):
 
             if game_structure['tower-3'] == [x for x in range(1, disk_amount + 1)]:
                 # or game_structure['tower-2'] == [x for x in range(1, disk_amount + 1)]:
+                # furtka na koniec gry też na 2 słupie
                 print('Wygrana!')
                 break
             sleep(1)
