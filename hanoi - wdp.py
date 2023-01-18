@@ -47,7 +47,7 @@ def game(disk_amount, who_plays):
 
         # zmiana dyskow
 
-        if from_choice and on_choice in ['1', '2', '3']:
+        if from_choice in ['1', '2', '3'] and on_choice in ['1', '2', '3']:
 
             # structure[f'tower-{from_choice}'][0], structure[f'tower-{on_choice}'][-1] = \
             # structure[f'tower-{on_choice}'][-1], structure[f'tower-{from_choice}'][0]
@@ -129,6 +129,7 @@ def game(disk_amount, who_plays):
             print(f'Ilość wykonanych ruchów: {counter}\n')
 
             if game_structure['tower-3'] == [x for x in range(1, disk_amount + 1)]:
+                # or game_structure['tower-2'] == [x for x in range(1, disk_amount + 1)]:
                 print('Wygrana!')
                 break
             sleep(1)
@@ -138,7 +139,10 @@ def game(disk_amount, who_plays):
 
 
 def main():
-    print('Witaj w grze \"Wieże Hanoi\"')
+    print(
+        'Witaj w grze \"Wieże Hanoi\"\nTwoim celem jest przełożenie krążków na ostatni słupek.'
+        '\nNie można kłaść większych słupków na mniejsze. Powodzenia!'
+    )
     while True:
         game_choice = input('\n[1] Graj\n[2] Automatyczna gra\n[0] Zakończ\n> ')
         if game_choice == '1':
