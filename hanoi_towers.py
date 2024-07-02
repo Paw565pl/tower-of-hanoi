@@ -1,7 +1,7 @@
 from time import sleep
 
 
-def game(disks_amount, who_plays):
+def game(disks_amount: int, who_plays: str):
     def print_structure(structure):
         for i in range(len(structure['tower-1'])):
             if structure['tower-1'][i] >= 1:
