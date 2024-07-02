@@ -47,7 +47,7 @@ def game(disk_amount, who_plays):
 
         # zmiana dyskow
 
-        if from_choice in ['1', '2', '3'] and on_choice in ['1', '2', '3']:
+        if from_choice in ['1', '2', '3'] and on_choice in ['1', '2', '3'] and from_choice != on_choice:
 
             # structure[f'tower-{from_choice}'][0], structure[f'tower-{on_choice}'][-1] = \
             # structure[f'tower-{on_choice}'][-1], structure[f'tower-{from_choice}'][0]
