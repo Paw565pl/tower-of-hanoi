@@ -3,23 +3,23 @@ from typing import Literal
 
 
 def game(disks_amount: int, who_plays: Literal['player', 'cpu']):
-    def print_structure(structure):
-        for i in range(len(structure['tower-1'])):
-            if structure['tower-1'][i] >= 1:
-                print('-' * structure['tower-1'][i], ' ' * (len(structure['tower-1']) - structure['tower-1'][i]),
+    def print_board(board):
+        for i in range(len(board[0])):
+            if board[0][i] >= 1:
+                print('-' * board[0][i], ' ' * (len(board[0]) - board[0][i]),
                       end='')
             else:
-                print('|', ' ' * (len(structure['tower-1']) - 1), end='')
-            if structure['tower-2'][i] >= 1:
-                print('-' * structure['tower-2'][i], ' ' * (len(structure['tower-2']) - structure['tower-2'][i]),
+                print('|', ' ' * (len(board[0]) - 1), end='')
+            if board[1][i] >= 1:
+                print('-' * board[1][i], ' ' * (len(board[1]) - board[1][i]),
                       end='')
             else:
-                print('|', ' ' * (len(structure['tower-2']) - 1), end='')
-            if structure['tower-3'][i] >= 1:
-                print('-' * structure['tower-3'][i], ' ' * (len(structure['tower-3']) - structure['tower-3'][i]),
+                print('|', ' ' * (len(board[1]) - 1), end='')
+            if board[2][i] >= 1:
+                print('-' * board[2][i], ' ' * (len(board[2]) - board[2][i]),
                       end='')
             else:
-                print('|', ' ' * (len(structure['tower-3']) - 1), end='')
+                print('|', ' ' * (len(board[2]) - 1), end='')
             print('')
 
     def change_structure(structure):
@@ -27,12 +27,12 @@ def game(disks_amount: int, who_plays: Literal['player', 'cpu']):
         on_choice = None
 
         if who_plays == 'player':
-            from_choice = input('Which tower do you want to move the disk from? Enter the tower number [0 to exit]\n> ')
-            if from_choice == '0':
+            from_choice = int(input('Which tower do you want to move the disk from? Enter the tower number [0 to exit]\n> '))
+            if from_choice == 0:
                 print('Goodbye!')
                 exit()
-            on_choice = input('Which tower do you want to move the disk to? Enter the tower number [0 to exit]\n> ')
-            if on_choice == '0':
+            on_choice = int(input('Which tower do you want to move the disk to? Enter the tower number [0 to exit]\n> '))
+            if on_choice == 0:
                 print('Goodbye!')
                 exit()
 
@@ -42,34 +42,37 @@ def game(disks_amount: int, who_plays: Literal['player', 'cpu']):
             from_choice = steps.pop(0)
             on_choice = steps.pop(0)
 
+        from_choice -= 1
+        on_choice -= 1
+
         # disks change
-        if from_choice in ['1', '2', '3'] and on_choice in ['1', '2', '3'] and from_choice != on_choice:
+        if from_choice in [0, 1, 2] and on_choice in [0, 1, 2] and from_choice != on_choice:
             i_to_take = None
             i_to_replace = None
 
-            if structure[f'tower-{from_choice}'] == [0] * disks_amount:
+            if structure[from_choice] == [0] * disks_amount:
                 print('You can\'t take from an empty tower!')
                 return False
 
-            for element in structure[f'tower-{from_choice}']:
+            for element in structure[from_choice]:
                 if element != 0:
-                    i_to_take = structure[f'tower-{from_choice}'].index(element)
+                    i_to_take = structure[from_choice].index(element)
                     break
 
-            for element in structure[f'tower-{on_choice}'][::-1]:
+            for element in structure[on_choice][::-1]:
                 if element == 0:
-                    i_to_replace = len(structure[f'tower-{on_choice}']) - 1 - structure[f'tower-{on_choice}'][
+                    i_to_replace = len(structure[on_choice]) - 1 - structure[on_choice][
                                                                               ::-1].index(element)
                     break
 
             # block invalid moves
-            if structure[f'tower-{on_choice}'][-1] != 0 and structure[f'tower-{from_choice}'][i_to_take] > \
-                    structure[f'tower-{on_choice}'][i_to_replace + 1]:
+            if structure[on_choice][-1] != 0 and structure[from_choice][i_to_take] > \
+                    structure[on_choice][i_to_replace + 1]:
                 print('Invalid move!')
                 return False
             else:
-                structure[f'tower-{from_choice}'][i_to_take], structure[f'tower-{on_choice}'][i_to_replace] = \
-                    structure[f'tower-{on_choice}'][i_to_replace], structure[f'tower-{from_choice}'][i_to_take]
+                structure[from_choice][i_to_take], structure[on_choice][i_to_replace] = \
+                    structure[on_choice][i_to_replace], structure[from_choice][i_to_take]
                 return True
 
         else:
@@ -77,52 +80,53 @@ def game(disks_amount: int, who_plays: Literal['player', 'cpu']):
 
     steps = []
 
-    def cpu_game(n, s_pole, d_pole, i_pole):
+    def find_game_solution(n, s_pole, d_pole, i_pole):
         if n == 1:
             steps.append(s_pole)
             steps.append(d_pole)
             return
-        cpu_game(n - 1, s_pole, i_pole, d_pole)
+        
+        find_game_solution(n - 1, s_pole, i_pole, d_pole)
         steps.append(s_pole)
         steps.append(d_pole)
-        cpu_game(n - 1, i_pole, d_pole, s_pole)
+        find_game_solution(n - 1, i_pole, d_pole, s_pole)
 
-    game_structure = {
-        'tower-1': [x for x in range(1, disks_amount + 1)],
-        'tower-2': [0] * disks_amount,
-        'tower-3': [0] * disks_amount
-    }
+    game_board = [
+        [x for x in range(1, disks_amount + 1)],
+        [0] * disks_amount,
+        [0] * disks_amount
+    ]
 
     moves_counter = 0
 
     if who_plays == 'player':
         while True:
-            print_structure(game_structure)
+            print_board(game_board)
 
             print(f'Number of moves made: {moves_counter}\n')
 
             # winning condition
-            if game_structure['tower-3'] == [x for x in range(1, disks_amount + 1)]:
+            if game_board[2] == [x for x in range(1, disks_amount + 1)]:
                 print('You won! Congrats 😊')
                 break
 
-            if change_structure(game_structure):
+            if change_structure(game_board):
                 moves_counter += 1
 
     elif who_plays == 'cpu':
-        cpu_game(disks_amount, '1', '3', '2')
+        find_game_solution(disks_amount, 1, 3, 2)
         while True:
-            print_structure(game_structure)
+            print_board(game_board)
 
             print(f'Number of moves made: {moves_counter}\n')
 
-            if game_structure['tower-3'] == [x for x in range(1, disks_amount + 1)]:
+            if game_board[2] == [x for x in range(1, disks_amount + 1)]:
                 print('Game has been won!')
                 break
 
             sleep(1)
 
-            change_structure(game_structure)
+            change_structure(game_board)
             moves_counter += 1
 
 
